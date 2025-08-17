@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vote: Sci-Fi vs Fantasy vs Community</title>
+
+  <!-- CSP: safe and Firebase-friendly. Keep exactly one of these. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://apis.google.com; connect-src 'self' https://*.googleapis.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://content-firebaseappcheck.googleapis.com; img-src 'self' data: blob: https://*.gstatic.com https://*.googleusercontent.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none';">
+
+  <style>
+    body{font-family:system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 16px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+    button{padding:12px;border-radius:10px;border:1px solid #ddd;cursor:pointer}
+    .counts{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+    .counts div{padding:8px 12px;border:1px solid #eee;border-radius:8px}
+    .msg{margin-top:12px;color:#0a0}
+    .err{margin-top:12px;color:#a00;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <h1>Vote for one:</h1>
+
+  <div class="grid">
+    <button data-choice="scifi">Sci-Fi</button>
+    <button data-choice="fantasy">Fantasy</button>
+    <button data-choice="community">Community</button>
+  </div>
+
+  <div class="counts">
+    <div>Sci-Fi: <strong id="c-scifi">0</strong></div>
+    <div>Fantasy: <strong id="c-fantasy">0</strong></div>
+    <div>Community: <strong id="c-community">0</strong></div>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <div class="err" id="err"></div>
+
+  <!-- For user site use "/app.js"; for project site use "./app.js" -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
