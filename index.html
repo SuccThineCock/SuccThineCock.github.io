@@ -1,1 +1,17 @@
+<!doctype html>
+<meta charset="utf-8">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-functions.js";
 
+  const app = initializeApp({ /* your firebaseConfig */ });
+  const functions = getFunctions(app, "us-central1");
+  const hit = httpsCallable(functions, "hit");
+
+  const params = new URLSearchParams(location.search);
+  const page = params.get("page") || "global";
+  const { data } = await hit({ page });
+
+  // Post to parent (your Neocities page)
+  parent.postMessage({ type: "counter", page, count: data.count }, "*");
+</scrip
