@@ -1,5 +1,5 @@
 <!doctype html>
-<meta charset="utf-8" />
+<meta charset="utf-8">
 <title>counter widget</title>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -16,14 +16,10 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // page key from query (?page=/about). Use "global" if empty.
-  const page = (new URLSearchParams(location.search).get("page") || "global");
-  const key = encodeURIComponent(page);
-  const ref = doc(db, "counters", key);
-
-  // simple “once per tab” guard to reduce spam on reload
-  const ssKey = `visited:${key}`;
-  const already = sessionStorage.getItem(ssKey);
+  // 2. Key (per-page or global)
+  const params = new URLSearchParams(location.search);
+  const page = params.get("page") || "global";
+  const ref = doc(db, "counters", encodeURIComponent(page));
 
   async function bump() {
     let snap = await getDoc(ref);
@@ -31,11 +27,7 @@
       await setDoc(ref, { count: 1 });
       return 1;
     } else {
-      // only increment if we haven't in this tab yet
-      if (!already) {
-        await updateDoc(ref, { count: increment(1) });
-        sessionStorage.setItem(ssKey, "1");
-      }
+      await updateDoc(ref, { count: increment(1) });
       snap = await getDoc(ref);
       return snap.data().count;
     }
@@ -43,9 +35,10 @@
 
   try {
     const count = await bump();
+    // Send back to parent page
     parent.postMessage({ type: "counter", page, count }, "*");
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error("Counter error:", err);
     parent.postMessage({ type: "counter", page, count: "ERR" }, "*");
   }
 </script>
